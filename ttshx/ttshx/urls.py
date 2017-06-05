@@ -19,4 +19,7 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^user/',include('ttusers.urls')),
+    url(r'^',include('goods.urls')),
+    url(r'^tinymce/', include('tinymce.urls')),
+    url(r'^search/', include('haystack.urls')),
 ]

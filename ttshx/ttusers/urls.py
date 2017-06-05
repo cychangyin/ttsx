@@ -8,4 +8,9 @@ urlpatterns=[
     url(r'^post2/$',views.post2),
     url(r'^login/$',views.login),
     url(r'^post3/$',views.post3),
+    url(r'^logout/$',views.logout),
+    url(r'^info/$',views.info),
+    url(r'^site/$',views.site),
+    url(r'^order/$',views.order),
+
 ]

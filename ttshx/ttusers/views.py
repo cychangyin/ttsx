@@ -3,6 +3,7 @@ from django.shortcuts import render,redirect
 from models import *
 from django.http import HttpResponseRedirect,JsonResponse
 from hashlib import sha1
+from . import user_decorator
 # Create your views here.
 
 def index(request):
@@ -17,7 +18,7 @@ def post1(request):
     upasswd1=dict1.get('cpwd')
     uemail=dict1.get('email')
     if upasswd != upasswd1:
-        return redirect('/register/')
+        return redirect('/user/register/')
     else:
         per=UserInfo()
         per.uname=uname
@@ -27,7 +28,7 @@ def post1(request):
         per.upasswd=pwd2
         per.uemail=uemail
         per.save()
-        return redirect('/login/')
+        return redirect('/user/login/')
 
 def post2(request):
     name = request.GET.get('uname')
@@ -46,11 +47,14 @@ def post3(request):
     password=pp.get('pwd')
     jizhu=pp.get('jizhu',0)
     users=UserInfo.objects.filter(uname=name)
+
     if len(users)==1:
         mysha = sha1()
         mysha.update(password)
         pwd2 = mysha.hexdigest()
         if pwd2==users[0].upasswd:
+            print '读取cookie'
+            print request.COOKIES
             url=request.COOKIES.get('url','/')
             red=HttpResponseRedirect(url)
             red.set_cookie('url','',max_age=-1)
@@ -68,3 +72,35 @@ def post3(request):
         context = {'error_name': 1, 'error_pwd': 0, 'username': name, 'pwd': password}
         return render(request, 'ttusers/login.html', context)
 
+def logout(request):
+    request.session.flush()
+    return redirect('/')
+
+@user_decorator.login
+def info(request):
+    user_email = UserInfo.objects.get(id=request.session['user_id']).uemail
+    goods_list = []
+    context = {
+               'user_email': user_email,
+               'user_name': request.session['user_name'],
+               'page_name': 1,
+               'goods_list': goods_list}
+    return render(request,'ttusers/user_center_info.html',context)
+
+@user_decorator.login
+def site(request):
+    user = UserInfo.objects.get(id=request.session['user_id'])
+    if request.method == 'POST':
+        post = request.POST
+        user.ushou = post.get('ushou')
+        user.uaddrees = post.get('uaddress')
+        user.upostalcode = post.get('uyoubian')
+        user.uphone = post.get('uphone')
+        user.save()
+    context = {'user': user,
+               'page_name': 1}
+    return render(request, 'ttusers/user_center_site.html', context)
+
+@user_decorator.login
+def order(request):
+    return render(request,'ttusers/user_center_order.html')
