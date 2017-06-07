@@ -4,23 +4,22 @@
 	<script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="/static/js/slide.js"></script>
 {%endblock head%}
-{%block title%}
-<title>天天生鲜-首页</title>
-{%endblock title%}
+
 
 {%block content%}
 	<div class="navbar_con">
 		<div class="navbar">
 			<h1 class="fl">全部商品分类</h1>
 			<ul class="navlist fl">
-				<li><a href="">首页</a></li>
+				<li><a href="/">首页</a></li>
 				<li class="interval">|</li>
-				<li><a href="">手机生鲜</a></li>
+				<li><a href="#">手机生鲜</a></li>
 				<li class="interval">|</li>
-				<li><a href="">抽奖</a></li>
+				<li><a href="#">抽奖</a></li>
 			</ul>
 		</div>
 	</div>
+
 
 	<div class="center_con clearfix">
 		<ul class="subnav fl">
@@ -37,16 +36,21 @@
 				<li><img src="/static/images/slide02.jpg" alt="幻灯片"></li>
 				<li><img src="/static/images/slide03.jpg" alt="幻灯片"></li>
 				<li><img src="/static/images/slide04.jpg" alt="幻灯片"></li>
-			</ul>
+            </ul>
+
 			<div class="prev"></div>
 			<div class="next"></div>
 			<ul class="points"></ul>
 		</div>
+
 		<div class="adv fl">
 			<a href="#"><img src="/static/images/adv01.jpg"></a>
 			<a href="#"><img src="/static/images/adv02.jpg"></a>
 		</div>
+
 	</div>
+
+
 
 {%for item in list%}
 	<div class="list_model">
@@ -55,7 +59,7 @@
 			<div class="subtitle fl">
 				<span>|</span>
 				{%for i in item.click_list%}
-				<a href="#">{{i.title}}</a>
+				<a href="/detail{{i.id}}/">{{i.title}}</a>
 				{%endfor%}
 			</div>
 			<a href="/list{{item.type.id}}_1_1/" class="goods_more fr" id="fruit_more">查看更多 ></a>
@@ -67,8 +71,8 @@
 
 				{% for j in item.new_list %}
 				<li>
-					<h4><a href="#">{{j.title}}</a></h4>
-					<a href="#"><img src="/static/{{j.tpic}}"></a>
+					<h4><a href="/detail{{j.id}}/">{{j.title}}</a></h4>
+					<a href="/detail{{j.id}}/"><img src="/static/{{j.tpic}}"></a>
 					<div class="prize">¥ {{j.tprice}}</div>
 				</li>
 				{%endfor%}
@@ -78,6 +82,7 @@
 	</div>
 
 {%endfor%}
+
 
 
 	<script type="text/javascript" src="js/slideshow.js"></script>

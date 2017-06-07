@@ -72,7 +72,7 @@
 		<span>></span>
 		<a href="#">{{goods.gtype.title}}</a>
         <span>></span>
-        <a href="#">商品详情</a>
+        <a href="#">{{title}}</a>
 
 	</div>
 
@@ -151,17 +151,23 @@
 		var $to_x = $('#show_count').offset().top;
 		var $to_y = $('#show_count').offset().left;
 
-		$(".add_jump").css({'left':$add_y+80,'top':$add_x+10,'display':'block'})
 		$('#add_cart').click(function(){
-			$(".add_jump").stop().animate({
-				'left': $to_y+7,
-				'top': $to_x+7},
-				"fast", function() {
-					$(".add_jump").fadeOut('fast',function(){
-						$('#show_count').html(2);
-					});
+		    $.get('/cart/add{{goods.id}}_'+$('.num_show').val()+'/',function(data){
+		         if(data.islogin==0){
+                     //alert('请登录');
+                     location.href='/user/login/';
+                     return;
+                 }else {
+                    $('#show_count').html(data.count);
+                 }
+		    });
 
-			});
-		})
+		       $(".add_jump").stop().css({'left':$add_y+80,'top':$add_x+10,'display':'block'})
+            .animate({'left': $to_y+7, 'top': $to_x+7},"fast", function() {
+                $(".add_jump").fadeOut('fast');
+            });
+		});
+
+
 	</script>
 {%endblock bottom%}

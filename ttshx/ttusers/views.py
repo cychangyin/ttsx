@@ -4,14 +4,13 @@ from models import *
 from django.http import HttpResponseRedirect,JsonResponse
 from hashlib import sha1
 from . import user_decorator
+from  goods.models import *
 # Create your views here.
 
-def index(request):
-    return render(request,'ttusers/index.html')
 
 def register(request):
     return render(request,'ttusers/register.html')
-def post1(request):
+def regiter_handle(request):
     dict1=request.POST
     uname=dict1.get('user_name')
     upasswd=dict1.get('pwd')
@@ -30,7 +29,7 @@ def post1(request):
         per.save()
         return redirect('/user/login/')
 
-def post2(request):
+def register_handle_exist(request):
     name = request.GET.get('uname')
     count = UserInfo.objects.filter(uname=name).count()
     return JsonResponse({'count':count})
@@ -38,10 +37,10 @@ def post2(request):
 
 def login(request):
     uname = request.COOKIES.get('uname', '')
-    context = {'error_name': 0, 'error_pwd': 0, 'uname': uname}
+    context = {'title':'登录','error_name': 0, 'error_pwd': 0, 'uname': uname}
     return render(request,'ttusers/login.html',context)
 
-def post3(request):
+def login_handle(request):
     pp=request.POST
     name=pp.get('username')
     password=pp.get('pwd')
@@ -55,21 +54,22 @@ def post3(request):
         if pwd2==users[0].upasswd:
             print '读取cookie'
             print request.COOKIES
-            url=request.COOKIES.get('url','/')
-            red=HttpResponseRedirect(url)
-            red.set_cookie('url','',max_age=-1)
+            url=request.COOKIES.get('red_url','/')
+            #red=HttpResponseRedirect(url)
+            red=redirect(url)
+            red.set_cookie('red_url','',max_age=-1)
             if jizhu != 0:
                 red.set_cookie('uname',name)
             else:
-                red.set_cookie('url','',max_age=-1)
+                red.set_cookie('uname','',max_age=-1)
             request.session['user_id']=users[0].id
             request.session['user_name']=name
             return red
         else:
-            context = {'error_name': 0, 'error_pwd': 1, 'username': name, 'pwd': password}
+            context = {'title':'登录','error_name': 0, 'error_pwd': 1, 'username': name, 'pwd': password}
             return render(request, 'ttusers/login.html', context)
     else:
-        context = {'error_name': 1, 'error_pwd': 0, 'username': name, 'pwd': password}
+        context = {'title':'登录','error_name': 1, 'error_pwd': 0, 'username': name, 'pwd': password}
         return render(request, 'ttusers/login.html', context)
 
 def logout(request):
@@ -80,7 +80,14 @@ def logout(request):
 def info(request):
     user_email = UserInfo.objects.get(id=request.session['user_id']).uemail
     goods_list = []
+    goods_ids=request.COOKIES.get('liulan','')
+    if goods_ids != "":
+        goods_ids1=goods_ids.split(',')
+        for goods_id in goods_ids1:
+            goods_list.append(GoodsInfo.objects.get(id=int(goods_id)))
+
     context = {
+                'title':'用户中心',
                'user_email': user_email,
                'user_name': request.session['user_name'],
                'page_name': 1,
@@ -97,7 +104,9 @@ def site(request):
         user.upostalcode = post.get('uyoubian')
         user.uphone = post.get('uphone')
         user.save()
-    context = {'user': user,
+    context = {
+                'title':'用户中心',
+                'user': user,
                'page_name': 1}
     return render(request, 'ttusers/user_center_site.html', context)
 

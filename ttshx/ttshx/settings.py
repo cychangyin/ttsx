@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'ttusers',
     'goods',
+    'cart',
     'tinymce',
     'haystack',
 )
@@ -52,6 +53,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'ttusers.UrlMiddleware.url',
 )
 
 ROOT_URLCONF = 'ttshx.urls'

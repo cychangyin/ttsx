@@ -2,12 +2,11 @@ from django.conf.urls import url
 import views
 
 urlpatterns=[
-    url(r'^$',views.index),
     url(r'^register/$',views.register),
-    url(r'^post1/$',views.post1),
-    url(r'^post2/$',views.post2),
+    url(r'^register_handle/$',views.regiter_handle),
+    url(r'^register_handle_exist/$',views.register_handle_exist),
     url(r'^login/$',views.login),
-    url(r'^post3/$',views.post3),
+    url(r'^login_handle/$',views.login_handle),
     url(r'^logout/$',views.logout),
     url(r'^info/$',views.info),
     url(r'^site/$',views.site),

@@ -43,9 +43,6 @@
     })
 </script>
 {%endblock head%}
-{%block title%}
-	<title>天天生鲜-登录</title>
-{%endblock title%}
 
 {%block body%}
 <div class="login_top clearfix">
@@ -62,7 +59,7 @@
 			<a href="/user/register/">立即注册</a>
 		</div>
 		<div class="form_input">
-			<form method="post" action="/user/post3/" id="form">
+			<form method="post" action="/user/login_handle/" id="form">
 				{%csrf_token%}
 				<input type="text" name="username" class="name_input" value="{{uname}}" placeholder="请输入用户名">
 				<div class="user_error">输入错误</div>
