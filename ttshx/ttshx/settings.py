@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'ttusers',
     'goods',
     'cart',
+    'order',
     'tinymce',
     'haystack',
 )

@@ -5,6 +5,8 @@ from django.http import HttpResponseRedirect,JsonResponse
 from hashlib import sha1
 from . import user_decorator
 from  goods.models import *
+from order.models import *
+from django.core.paginator import Paginator
 # Create your views here.
 
 
@@ -111,5 +113,11 @@ def site(request):
     return render(request, 'ttusers/user_center_site.html', context)
 
 @user_decorator.login
-def order(request):
-    return render(request,'ttusers/user_center_order.html')
+def order(request,pindex):
+    order_list=OrderInfo.objects.filter(user_id=request.session['user_id']).order_by('id')
+    paginator=Paginator(order_list,3)
+    if pindex=="":
+        pindex=1
+    page=paginator.page(int(pindex))
+    context={'title':'用户中心','page_name':1,'paginator':paginator,'page':page}
+    return render(request,'ttusers/user_center_order.html',context)
