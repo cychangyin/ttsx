@@ -1,0 +1,96 @@
+{%extends 'base.html'%}
+
+{%block content%}
+	<div class="navbar_con">
+		<div class="navbar clearfix">
+			<div class="subnav_con fl">
+				<h1>全部商品分类</h1>
+				<span></span>
+				<ul class="subnav">
+					<li><a href="/list1_1_1" class="fruit">新鲜水果</a></li>
+					<li><a href="/list2_1_1" class="seafood">海鲜水产</a></li>
+					<li><a href="/list3_1_1" class="meet">猪牛羊肉</a></li>
+					<li><a href="/list4_1_1" class="egg">禽类蛋品</a></li>
+					<li><a href="/list5_1_1" class="vegetables">新鲜蔬菜</a></li>
+					<li><a href="/list6_1_1" class="ice">速冻食品</a></li>
+				</ul>
+			</div>
+			<ul class="navlist fl">
+				<li><a href="/">首页</a></li>
+				<li class="interval">|</li>
+				<li><a href="#">手机生鲜</a></li>
+				<li class="interval">|</li>
+				<li><a href="#">抽奖</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="breadcrumb">
+		<a href="#">全部分类</a>
+		<span>></span>
+		<a href="#">{{type.title}}</a>
+
+	</div>
+
+
+
+	<div class="main_wrap clearfix">
+		<div class="l_wrap fl clearfix">
+			<div class="new_goods">
+				<h3>新品推荐</h3>
+				<ul>
+
+                    {%for good in newlist%}
+					<li>
+						<a href="#"><img src="/static/{{good.tpic}}"></a>
+						<h4><a href="#">{{good.title}}</a></h4>
+						<div class="prize">￥{{good.tprice}}</div>
+					</li>
+                    {%endfor%}
+
+				</ul>
+			</div>
+		</div>
+
+		<div class="r_wrap fr clearfix">
+			<div class="sort_bar">
+				<a href="/list{{tid}}_1_1" {% if orderby = '1' %}class="active" {% endif %}>默认</a>
+				<a href="/list{{tid}}_1_2"{% if orderby = '2' %}class="active" {% endif %}>价格</a>
+				<a href="/list{{tid}}_1_3"{% if orderby = '3' %}class="active" {% endif %}>人气</a>
+			</div>
+
+			<ul class="goods_type_list clearfix">
+                {%for goods in page%}
+				<li>
+					<a href="/detail{{goods.id}}"><img src="/static/{{goods.tpic}}"></a>
+					<h4><a href="/detail{{goods.id}}">{{goods.title}}</a></h4>
+					<div class="operate">
+						<span class="prize">￥{{goods.tprice}}</span>
+						<span class="unit">{{goods.gprice}}/{{goods.gunit}}</span>
+						<a href="/cart/add{{goods.id}}_1/" class="add_goods" title="加入购物车"></a>
+					</div>
+				</li>
+                {%endfor%}
+			</ul>
+
+			<div class="pagenation">
+                {%if page.has_previous %}
+				    <a href="/list{{ tid }}_{{ page.number|add:-1 }}_{{orderby}}/">上一页</a>
+                {%endif%}
+
+                {%for pindex in page.paginator.page_range%}
+                    {%if pindex == page.number%}
+                        <a href="#" class="active">{{pindex}}</a>
+                    {%else%}
+                        <a href="/list{{tid}}_{{pindex}}_{{orderby}}/">{{pindex}}</a>
+                    {%endif%}
+                {%endfor%}
+
+                {%if page.has_next%}
+				  <a href="/list{{tid}}_{{page.number|add:'1'}}_{{orderby}}/">下一页></a>
+                {%endif%}
+			</div>
+		</div>
+	</div>
+
+{%endblock content%}
